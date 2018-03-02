@@ -1,6 +1,8 @@
 URLook
 ======
 
+[![Build Status](https://travis-ci.org/olshevskiy87/urlook.svg?branch=master)](https://travis-ci.org/olshevskiy87/urlook) [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/) [![Go Report Card](https://goreportcard.com/badge/github.com/olshevskiy87/urlook)](https://goreportcard.com/report/github.com/olshevskiy87/urlook)
+
 Find and check http(s) links in the text file.
 
 Install
