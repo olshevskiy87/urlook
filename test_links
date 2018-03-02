@@ -1,0 +1,7 @@
+http://cb.vu/unixtoolbox.xhtml - OK
+https://eax.me - OK
+http://eax.me - should redirect to https
+ftp://mail.ru - should not be parsed
+https://google.com - should redirect with code 302
+https://github.com - OK
+https://github.com/non-existent-url-non-existent-url-non-existent-url - should be Not Found
