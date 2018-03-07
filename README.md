@@ -42,6 +42,14 @@ URLs to check: 6
 issues found: 3
 ```
 
+Todo
+----
+
+[ ] read input from stdin
+[ ] try HEAD http request before GET
+[ ] add tests
+[ ] add white list option
+
 Motivations
 -----------
 
