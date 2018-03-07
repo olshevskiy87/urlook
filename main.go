@@ -51,7 +51,6 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
-	} else {
-		fmt.Println("no issues found")
 	}
+	fmt.Println("no issues found")
 }
