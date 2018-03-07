@@ -30,6 +30,11 @@ type URLChanItem struct {
 // for http request in seconds
 const DefaultHTTPRequestTimeout = 10
 
+var userAgent = fmt.Sprintf(
+	"%s_%s:urlook:v0.1 (by /u/olshevskiy87)",
+	runtime.GOOS, runtime.GOARCH,
+)
+
 // New returns new Bot object
 func New(urls []string) *Bot {
 	return &Bot{
@@ -129,7 +134,13 @@ func (b *Bot) checkURL(url string) (*Result, error) {
 		return nil, errors.New("http client is not defined")
 	}
 	// TODO: use Head on 405 (Method Not Allowed)
-	resp, err := b.clientHTTP.Get(url)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("could not prepare new http request: %v", err)
+	}
+	req.Header.Add("User-Agent", userAgent)
+	resp, err := b.clientHTTP.Do(req)
 	if err != nil {
 		return &Result{
 			URL:     url,
