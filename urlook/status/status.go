@@ -42,10 +42,8 @@ func New(code int) *Status {
 
 // GetSign returns corresponding status sign (icon)
 func (s *Status) GetSign() string {
-	var res string
-	if sign, ok := signs[s.internalCode]; ok {
-		res = sign
-	} else {
+	res, ok := signs[s.internalCode]
+	if !ok {
 		res = signs[Unknown]
 	}
 	return res
