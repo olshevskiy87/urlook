@@ -5,3 +5,4 @@ ftp://mail.ru - should not be parsed
 https://google.com - should redirect with code 302
 https://github.com - OK
 https://github.com/non-existent-url-non-existent-url-non-existent-url - should be Not Found
+https://www.reddit.com - OK (sensitive to generic names in User-Agent)
