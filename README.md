@@ -68,6 +68,7 @@ Todo
 - [ ] try HEAD http request before GET
 - [ ] add tests
 - [ ] add white list option
+- [ ] remove duplicate urls (a CLI option)
 
 Motivations
 -----------
