@@ -13,10 +13,9 @@ import (
 func parseURLs(source string) ([]string, error) {
 	re, err := xurls.StrictMatchingScheme("https?://")
 	if err != nil {
-		return nil, fmt.Errorf("could not prepare search regex: %s", err)
+		return nil, fmt.Errorf("could not prepare search regex: %v", err)
 	}
-	result := re.FindAllString(source, -1)
-	return result, nil
+	return re.FindAllString(source, -1), nil
 }
 
 func main() {
