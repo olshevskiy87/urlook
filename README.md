@@ -65,10 +65,11 @@ Todo
 ----
 
 - [x] read input from stdin
+- [x] remove duplicate urls
 - [ ] try HEAD http request before GET
 - [ ] add tests
 - [ ] add white list option
-- [ ] remove duplicate urls (a CLI option)
+- [ ] add cli-option to fail on duplicate url
 
 Motivations
 -----------

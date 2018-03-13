@@ -14,7 +14,7 @@ import (
 
 // Bot is a main app object
 type Bot struct {
-	urls         []string
+	urls         map[string]int
 	clientHTTP   *http.Client
 	workersCount int
 }
@@ -37,8 +37,16 @@ var userAgent = fmt.Sprintf(
 
 // New returns new Bot object
 func New(urls []string) *Bot {
+	var urlsMap = make(map[string]int, len(urls))
+	for _, url := range urls {
+		if _, ok := urlsMap[url]; !ok {
+			urlsMap[url] = 1
+			continue
+		}
+		urlsMap[url]++
+	}
 	return &Bot{
-		urls: urls,
+		urls: urlsMap,
 		clientHTTP: &http.Client{
 			Timeout: time.Duration(
 				time.Duration(DefaultHTTPRequestTimeout) * time.Second,
@@ -74,12 +82,16 @@ func (b *Bot) SetWorkersCount(newWorkersCount int) {
 
 // CheckAllURLs checks all given URLs
 func (b *Bot) CheckAllURLs() error {
+	urls := make([]string, 0, len(b.urls))
+	for url := range b.urls {
+		urls = append(urls, url)
+	}
 	var (
-		urlsCount = len(b.urls)
+		urlsCount = len(urls)
 		results   = make([]*Result, urlsCount)
 	)
 	fmt.Printf("URLs to check: %d\n", urlsCount)
-	for i, url := range b.urls {
+	for i, url := range urls {
 		fmt.Printf("%3d. %s\n", i+1, url)
 	}
 
@@ -103,7 +115,7 @@ func (b *Bot) CheckAllURLs() error {
 			}
 		}()
 	}
-	for i, url := range b.urls {
+	for i, url := range urls {
 		urlChan <- &URLChanItem{
 			URL:   url,
 			Index: i,
