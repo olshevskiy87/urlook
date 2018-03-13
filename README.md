@@ -28,13 +28,14 @@ Options:
 
 ```bash
 $ urlook test_links
-URLs to check: 6
+URLs to check: 7
   1. http://cb.vu/unixtoolbox.xhtml
   2. https://eax.me
   3. http://eax.me
   4. https://google.com
   5. https://github.com
   6. https://github.com/non-existent-url-non-existent-url-non-existent-url
+  7. https://www.reddit.com
 ✓→✓→✓x
   1. http://eax.me [301, Moved Permanently] -> https://eax.me/
   2. https://google.com [302, Found] -> https://www.google.ru/?gfe_rd=cr&dcr=0&ei=EFSZWqWQAcGDtAGArrLYBw
