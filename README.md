@@ -42,10 +42,29 @@ URLs to check: 6
 issues found: 3
 ```
 
+```
+$ grep github test_links | urlook
+URLs to check: 2
+  1. https://github.com
+  2. https://github.com/non-existent-url-non-existent-url-non-existent-url
+x✓
+  1. https://github.com/non-existent-url-non-existent-url-non-existent-url [404, Not Found]
+issues found: 1
+```
+
+```
+$ echo 'check these links: https://ya.ru, https://www.reddit.com' | urlook
+URLs to check: 2
+  1. https://ya.ru
+  2. https://www.reddit.com
+✓✓
+no issues found
+```
+
 Todo
 ----
 
-- [ ] read input from stdin
+- [x] read input from stdin
 - [ ] try HEAD http request before GET
 - [ ] add tests
 - [ ] add white list option
