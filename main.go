@@ -61,7 +61,7 @@ func main() {
 	}
 	if len(urls) == 0 {
 		fmt.Fprintln(os.Stderr, "no URLs found")
-		os.Exit(1)
+		os.Exit(0)
 	}
 	app := urlook.New(urls)
 	/*
