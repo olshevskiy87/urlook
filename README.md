@@ -17,14 +17,18 @@ Usage
 
 ```bash
 $ urlook -h
-Usage: urlook FILENAME
+Usage: urlook [--fail-on-duplicate] FILENAME
 
 Positional arguments:
   FILENAME               filename with links to check
 
 Options:
+  --fail-on-duplicate    fail if there is a duplicate url (default: false)
   --help, -h             display this help and exit
 ```
+
+Examples
+--------
 
 ```bash
 $ urlook test_links
@@ -62,15 +66,27 @@ URLs to check: 2
 no issues found
 ```
 
+```
+$ echo 'https://ya.ru https://github.com https://ya.ru' | urlook --fail-on-duplicate
+URLs to check: 2
+  1. https://github.com
+  2. https://ya.ru
+✓✓
+Duplicates:
+ - https://ya.ru (2)
+duplicates found: 1
+```
+
 Todo
 ----
 
 - [x] read input from stdin
 - [x] remove duplicate urls
+- [x] add cli-option to fail on duplicate url
 - [ ] try HEAD http request before GET
 - [ ] add tests
 - [ ] add white list option
-- [ ] add cli-option to fail on duplicate url
+- [ ] add cli-option timeout
 
 Motivations
 -----------

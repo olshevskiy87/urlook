@@ -20,7 +20,8 @@ func parseURLs(source string) ([]string, error) {
 
 func main() {
 	var args struct {
-		Filename string `arg:"positional" help:"filename with links to check"`
+		Filename        string `arg:"positional" help:"filename with links to check"`
+		FailOnDuplicate bool   `arg:"--fail-on-duplicate" help:"fail if there is a duplicate url (default: false)"`
 	}
 	arg.MustParse(&args)
 
@@ -64,6 +65,7 @@ func main() {
 		os.Exit(0)
 	}
 	app := urlook.New(urls)
+	app.SetIsFailOnDuplicates(args.FailOnDuplicate)
 	/*
 	 *err = app.SetTimeout(5)
 	 *if err != nil {

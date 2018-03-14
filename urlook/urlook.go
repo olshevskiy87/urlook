@@ -14,9 +14,10 @@ import (
 
 // Bot is a main app object
 type Bot struct {
-	urls         map[string]int
-	clientHTTP   *http.Client
-	workersCount int
+	urls               map[string]int
+	clientHTTP         *http.Client
+	workersCount       int
+	isFailOnDuplicates bool
 }
 
 // URLChanItem contains an url and it's index
@@ -55,7 +56,8 @@ func New(urls []string) *Bot {
 				return http.ErrUseLastResponse
 			},
 		},
-		workersCount: runtime.NumCPU() * 2, // TODO: set a proper value
+		workersCount:       runtime.NumCPU() * 2, // TODO: set a proper value
+		isFailOnDuplicates: true,
 	}
 }
 
@@ -80,10 +82,19 @@ func (b *Bot) SetWorkersCount(newWorkersCount int) {
 	b.workersCount = newWorkersCount
 }
 
+// SetIsFailOnDuplicates defines if duplicate urls will be ignored
+func (b *Bot) SetIsFailOnDuplicates(isFail bool) {
+	b.isFailOnDuplicates = isFail
+}
+
 // CheckAllURLs checks all given URLs
 func (b *Bot) CheckAllURLs() error {
 	urls := make([]string, 0, len(b.urls))
-	for url := range b.urls {
+	duplicateUrls := make(map[string]int, len(b.urls))
+	for url, cnt := range b.urls {
+		if cnt > 1 {
+			duplicateUrls[url] = cnt
+		}
 		urls = append(urls, url)
 	}
 	var (
@@ -136,6 +147,14 @@ func (b *Bot) CheckAllURLs() error {
 	}
 	if errorsCount > 0 {
 		return fmt.Errorf("issues found: %d", errorsCount)
+	}
+	var duplicatesNum = len(duplicateUrls)
+	if b.isFailOnDuplicates && duplicatesNum > 0 {
+		fmt.Println("Duplicates:")
+		for url, cnt := range duplicateUrls {
+			fmt.Printf(" - %s (%d)\n", url, cnt)
+		}
+		return fmt.Errorf("duplicates found: %d", duplicatesNum)
 	}
 	return nil
 }
