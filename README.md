@@ -17,13 +17,15 @@ Usage
 
 ```bash
 $ urlook -h
-Usage: urlook [--fail-on-duplicate] FILENAME
+Usage: urlook [--fail-on-duplicate] [--timeout TIMEOUT] FILENAME
 
 Positional arguments:
   FILENAME               filename with links to check
 
 Options:
-  --fail-on-duplicate    fail if there is a duplicate url (default: false)
+  --fail-on-duplicate    fail if there is a duplicate url
+  --timeout TIMEOUT, -t TIMEOUT
+                         request timeout in seconds [default: 10]
   --help, -h             display this help and exit
 ```
 
@@ -83,10 +85,10 @@ Todo
 - [x] read input from stdin
 - [x] remove duplicate urls
 - [x] add cli-option to fail on duplicate url
+- [x] add cli-option timeout
 - [ ] try HEAD http request before GET
 - [ ] add tests
 - [ ] add white list option
-- [ ] add cli-option timeout
 
 Motivations
 -----------
