@@ -73,13 +73,6 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	/*
-	 *err = app.SetTimeout(5)
-	 *if err != nil {
-	 *    fmt.Println(err)
-	 *    os.Exit(1)
-	 *}
-	 */
 	err = app.CheckAllURLs()
 	if err != nil {
 		fmt.Println(err)
