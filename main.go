@@ -68,13 +68,11 @@ func main() {
 	}
 	app := urlook.New(urls)
 	app.SetIsFailOnDuplicates(args.FailOnDuplicate)
-	err = app.SetTimeout(args.RequestTimeout)
-	if err != nil {
+	if err := app.SetTimeout(args.RequestTimeout); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	err = app.CheckAllURLs()
-	if err != nil {
+	if err := app.CheckAllURLs(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
