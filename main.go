@@ -47,7 +47,7 @@ func main() {
 		inputText = string(stdinText)
 	} else {
 		if args.Filename == "" {
-			fmt.Fprintf(os.Stderr, "specify a filename")
+			fmt.Fprintln(os.Stderr, "specify a filename")
 			os.Exit(1)
 		}
 		fileContent, err := ioutil.ReadFile(args.Filename)
