@@ -29,7 +29,7 @@ func main() {
 
 	stdinStat, err := os.Stdin.Stat()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "could not get stdin stats: %v", err)
+		fmt.Fprintf(os.Stderr, "could not get stdin stats: %v\n", err)
 		os.Exit(1)
 	}
 	isPipe := (stdinStat.Mode() & os.ModeCharDevice) == 0
