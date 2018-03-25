@@ -20,9 +20,10 @@ func parseURLs(source string) ([]string, error) {
 
 func main() {
 	var args struct {
-		Filename        string `arg:"positional" help:"filename with links to check"`
-		FailOnDuplicate bool   `arg:"--fail-on-duplicate" help:"fail if there is a duplicate url"`
-		RequestTimeout  int    `arg:"--timeout,-t" help:"request timeout in seconds"`
+		Filename        string   `arg:"positional" help:"filename with links to check"`
+		FailOnDuplicate bool     `arg:"--fail-on-duplicate" help:"fail if there is a duplicate url"`
+		RequestTimeout  int      `arg:"--timeout,-t" help:"request timeout in seconds"`
+		WhiteList       []string `arg:"--white,-w,separate" help:"white list url (can be specified multiple times)"`
 	}
 	args.RequestTimeout = 10
 	arg.MustParse(&args)
@@ -72,6 +73,7 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	app.SetWhiteList(args.WhiteList)
 	if err := app.CheckAllURLs(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

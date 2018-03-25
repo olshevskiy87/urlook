@@ -17,7 +17,7 @@ Usage
 
 ```bash
 $ urlook -h
-Usage: urlook [--fail-on-duplicate] [--timeout TIMEOUT] FILENAME
+Usage: urlook [--fail-on-duplicate] [--timeout TIMEOUT] [--white WHITE] FILENAME
 
 Positional arguments:
   FILENAME               filename with links to check
@@ -26,6 +26,8 @@ Options:
   --fail-on-duplicate    fail if there is a duplicate url
   --timeout TIMEOUT, -t TIMEOUT
                          request timeout in seconds [default: 10]
+  --white WHITE, -w WHITE
+                         white list url (can be specified multiple times)
   --help, -h             display this help and exit
 ```
 
@@ -50,13 +52,14 @@ issues found: 3
 ```
 
 ```
-$ grep github test_links | urlook
-URLs to check: 2
+$ grep github test\_links | urlook --white non-existent-url
+URLs to check: 1
   1. https://github.com
-  2. https://github.com/non-existent-url-non-existent-url-non-existent-url
-x✓
-  1. https://github.com/non-existent-url-non-existent-url-non-existent-url [404, Not Found]
-issues found: 1
+✓
+White listed URLs (1):
+ - https://github.com/non-existent-url-non-existent-url-non-existent-url
+
+no issues found
 ```
 
 ```
@@ -86,9 +89,10 @@ Todo
 - [x] remove duplicate urls
 - [x] add cli-option to fail on duplicate url
 - [x] add cli-option timeout
+- [x] add white list option
+- [ ] read more than one file
 - [ ] try HEAD http request before GET
 - [ ] add tests
-- [ ] add white list option
 
 Motivations
 -----------

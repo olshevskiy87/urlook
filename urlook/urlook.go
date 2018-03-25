@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"runtime"
+	"strings"
 	"sync"
 	"time"
 
@@ -18,6 +19,7 @@ type Bot struct {
 	clientHTTP         *http.Client
 	workersCount       int
 	isFailOnDuplicates bool
+	whiteList          []string
 }
 
 // URLChanItem contains an url and it's index
@@ -87,13 +89,31 @@ func (b *Bot) SetIsFailOnDuplicates(isFail bool) {
 	b.isFailOnDuplicates = isFail
 }
 
+// SetWhiteList sets the white list urls
+func (b *Bot) SetWhiteList(wl []string) {
+	var newWhiteList = make([]string, 0, len(wl))
+	for _, w := range wl {
+		var trimmedW = strings.TrimSpace(w)
+		if trimmedW == "" {
+			continue
+		}
+		newWhiteList = append(newWhiteList, trimmedW)
+	}
+	b.whiteList = newWhiteList
+}
+
 // CheckAllURLs checks all given URLs
 func (b *Bot) CheckAllURLs() error {
 	urls := make([]string, 0, len(b.urls))
 	duplicateUrls := make(map[string]int, len(b.urls))
+	whiteListUrls := make([]string, 0, len(b.urls))
 	for url, cnt := range b.urls {
 		if cnt > 1 {
 			duplicateUrls[url] = cnt
+		}
+		if b.checkURLInWhiteList(url) {
+			whiteListUrls = append(whiteListUrls, url)
+			continue
 		}
 		urls = append(urls, url)
 	}
@@ -135,8 +155,15 @@ func (b *Bot) CheckAllURLs() error {
 	close(urlChan)
 	wg.Wait()
 
-	fmt.Println()
+	var whiteListNum = len(whiteListUrls)
+	if whiteListNum > 0 {
+		fmt.Printf("\nWhite listed URLs (%d):\n", whiteListNum)
+		for _, url := range whiteListUrls {
+			fmt.Printf(" - %s\n", url)
+		}
+	}
 
+	fmt.Println()
 	var errorsCount int
 	for _, res := range results {
 		if status.IsSuccess(res.Status.Code) {
@@ -200,4 +227,14 @@ func (b *Bot) checkURL(url string) (*Result, error) {
 		}
 	}
 	return res, nil
+}
+
+// checkURLInWhiteList checks if the given url is in white-list
+func (b *Bot) checkURLInWhiteList(url string) bool {
+	for _, whiteListURL := range b.whiteList {
+		if strings.Contains(url, whiteListURL) {
+			return true
+		}
+	}
+	return false
 }
