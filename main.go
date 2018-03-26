@@ -11,6 +11,18 @@ import (
 	"mvdan.cc/xurls"
 )
 
+var args struct {
+	Filenames       []string `arg:"positional" help:"filenames with links to check"`
+	FailOnDuplicate bool     `arg:"--fail-on-duplicate" help:"fail if there is a duplicate url"`
+	RequestTimeout  int      `arg:"--timeout,-t" help:"request timeout in seconds"`
+	WhiteList       []string `arg:"--white,-w,separate" help:"white list url (can be specified multiple times)"`
+}
+
+func init() {
+	args.RequestTimeout = 10
+	arg.MustParse(&args)
+}
+
 func parseURLs(source string) ([]string, error) {
 	re, err := xurls.StrictMatchingScheme("https?://")
 	if err != nil {
@@ -19,50 +31,42 @@ func parseURLs(source string) ([]string, error) {
 	return re.FindAllString(source, -1), nil
 }
 
-func main() {
-	var args struct {
-		Filenames       []string `arg:"positional" help:"filenames with links to check"`
-		FailOnDuplicate bool     `arg:"--fail-on-duplicate" help:"fail if there is a duplicate url"`
-		RequestTimeout  int      `arg:"--timeout,-t" help:"request timeout in seconds"`
-		WhiteList       []string `arg:"--white,-w,separate" help:"white list url (can be specified multiple times)"`
-	}
-	args.RequestTimeout = 10
-	arg.MustParse(&args)
-
+func getInputText() (string, error) {
 	stdinStat, err := os.Stdin.Stat()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "could not get stdin stats: %v\n", err)
-		os.Exit(1)
+		return "", fmt.Errorf("could not get stdin stats: %v", err)
 	}
 	isPipe := (stdinStat.Mode() & os.ModeCharDevice) == 0
 	filenamesCnt := len(args.Filenames)
 	if isPipe && filenamesCnt > 0 {
-		fmt.Fprintln(os.Stderr, "please specify at least one filename or pass text from standard input")
-		os.Exit(1)
+		return "", fmt.Errorf("please specify at least one filename or pass text from standard input")
 	}
-	var inputText string
 	if isPipe {
 		stdinText, err := ioutil.ReadAll(os.Stdin)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "could not read from stdin: %v", err)
-			os.Exit(1)
+			return "", fmt.Errorf("could not read from stdin: %v", err)
 		}
-		inputText = string(stdinText)
-	} else {
-		if filenamesCnt == 0 {
-			fmt.Fprintln(os.Stderr, "specify at least one filename")
-			os.Exit(1)
+		return string(stdinText), nil
+	}
+	if filenamesCnt == 0 {
+		return "", fmt.Errorf("specify at least one filename")
+	}
+	var inputBuffer bytes.Buffer
+	for _, fname := range args.Filenames {
+		fileContent, err := ioutil.ReadFile(fname)
+		if err != nil {
+			return "", fmt.Errorf("could not read file \"%s\": %v", fname, err)
 		}
-		var inputBuffer bytes.Buffer
-		for _, fname := range args.Filenames {
-			fileContent, err := ioutil.ReadFile(fname)
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "could not read file \"%s\": %v", fname, err)
-				os.Exit(1)
-			}
-			inputBuffer.Write(fileContent)
-		}
-		inputText = inputBuffer.String()
+		inputBuffer.Write(fileContent)
+	}
+	return inputBuffer.String(), nil
+}
+
+func main() {
+	inputText, err := getInputText()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "could not get input text: %v\n", err)
+		os.Exit(1)
 	}
 	urls, err := parseURLs(inputText)
 	if err != nil {
