@@ -17,10 +17,10 @@ Usage
 
 ```bash
 $ urlook -h
-Usage: urlook [--fail-on-duplicate] [--timeout TIMEOUT] [--white WHITE] FILENAME
+Usage: urlook [--fail-on-duplicate] [--timeout TIMEOUT] [--white WHITE] [FILENAMES [FILENAMES ...]]
 
 Positional arguments:
-  FILENAME               filename with links to check
+  FILENAMES              filenames with links to check
 
 Options:
   --fail-on-duplicate    fail if there is a duplicate url
