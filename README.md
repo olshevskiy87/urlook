@@ -90,7 +90,7 @@ Todo
 - [x] add cli-option to fail on duplicate url
 - [x] add cli-option timeout
 - [x] add white list option
-- [ ] read more than one file
+- [x] read more than one file
 - [ ] try HEAD http request before GET
 - [ ] add tests
 

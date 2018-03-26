@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -20,7 +21,7 @@ func parseURLs(source string) ([]string, error) {
 
 func main() {
 	var args struct {
-		Filename        string   `arg:"positional" help:"filename with links to check"`
+		Filenames       []string `arg:"positional" help:"filenames with links to check"`
 		FailOnDuplicate bool     `arg:"--fail-on-duplicate" help:"fail if there is a duplicate url"`
 		RequestTimeout  int      `arg:"--timeout,-t" help:"request timeout in seconds"`
 		WhiteList       []string `arg:"--white,-w,separate" help:"white list url (can be specified multiple times)"`
@@ -34,8 +35,9 @@ func main() {
 		os.Exit(1)
 	}
 	isPipe := (stdinStat.Mode() & os.ModeCharDevice) == 0
-	if isPipe && args.Filename != "" {
-		fmt.Fprintln(os.Stderr, "please specify a filename or pass text from standard input")
+	filenamesCnt := len(args.Filenames)
+	if isPipe && filenamesCnt > 0 {
+		fmt.Fprintln(os.Stderr, "please specify at least one filename or pass text from standard input")
 		os.Exit(1)
 	}
 	var inputText string
@@ -47,16 +49,20 @@ func main() {
 		}
 		inputText = string(stdinText)
 	} else {
-		if args.Filename == "" {
-			fmt.Fprintln(os.Stderr, "specify a filename")
+		if filenamesCnt == 0 {
+			fmt.Fprintln(os.Stderr, "specify at least one filename")
 			os.Exit(1)
 		}
-		fileContent, err := ioutil.ReadFile(args.Filename)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "could not read file \"%s\": %v", args.Filename, err)
-			os.Exit(1)
+		var inputBuffer bytes.Buffer
+		for _, fname := range args.Filenames {
+			fileContent, err := ioutil.ReadFile(fname)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "could not read file \"%s\": %v", fname, err)
+				os.Exit(1)
+			}
+			inputBuffer.Write(fileContent)
 		}
-		inputText = string(fileContent)
+		inputText = inputBuffer.String()
 	}
 	urls, err := parseURLs(inputText)
 	if err != nil {
