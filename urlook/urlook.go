@@ -141,7 +141,7 @@ func (b *Bot) CheckAllURLs() error {
 					fmt.Fprintln(os.Stderr, err)
 					continue
 				}
-				fmt.Print(res.Status.GetSign())
+				fmt.Print(res.Status)
 				results[urlChanItem.Index] = res
 			}
 		}()

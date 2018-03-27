@@ -39,8 +39,8 @@ func New(code int) *Status {
 	}
 }
 
-// GetSign returns corresponding status sign (icon)
-func (s *Status) GetSign() string {
+// String returns corresponding status sign (icon)
+func (s *Status) String() string {
 	var internalCode int
 	switch {
 	case s.IsInfo():
