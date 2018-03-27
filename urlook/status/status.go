@@ -6,9 +6,8 @@ import (
 
 // Status contains http query status info
 type Status struct {
-	Code         int
-	internalCode int
-	Text         string
+	Code int
+	Text string
 }
 
 // internal http status codes
