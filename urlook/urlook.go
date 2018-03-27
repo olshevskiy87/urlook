@@ -166,7 +166,7 @@ func (b *Bot) CheckAllURLs() error {
 	fmt.Println()
 	var errorsCount int
 	for _, res := range results {
-		if status.IsSuccess(res.Status.Code) {
+		if res.Status.IsSuccess() {
 			continue
 		}
 		errorsCount++
@@ -218,7 +218,7 @@ func (b *Bot) checkURL(url string) (*Result, error) {
 		Status: status.New(resp.StatusCode),
 	}
 
-	if status.IsRedirect(res.Status.Code) {
+	if res.Status.IsRedirect() {
 		locationURL, err := resp.Location()
 		if err != nil {
 			res.Message = fmt.Sprintf("could not retrieve Location: %s", err.Error())

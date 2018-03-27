@@ -34,65 +34,56 @@ var signs = map[int]string{
 // New returns new Status object
 func New(code int) *Status {
 	return &Status{
-		Code:         code,
-		internalCode: getInternalCode(code),
-		Text:         http.StatusText(code),
+		Code: code,
+		Text: http.StatusText(code),
 	}
 }
 
 // GetSign returns corresponding status sign (icon)
 func (s *Status) GetSign() string {
-	res, ok := signs[s.internalCode]
-	if !ok {
-		res = signs[Unknown]
-	}
-	return res
-}
-
-// getInternalCode returns corresponding internal
-// status code by http code
-func getInternalCode(code int) int {
-	var res int
+	var internalCode int
 	switch {
-	case IsInfo(code):
-		res = Info
-	case IsSuccess(code):
-		res = Success
-	case IsRedirect(code):
-		res = Redirect
-	case IsClientError(code):
-		res = ClientError
-	case IsServerError(code):
-		res = ServerError
+	case s.IsInfo():
+		internalCode = Info
+	case s.IsSuccess():
+		internalCode = Success
+	case s.IsRedirect():
+		internalCode = Redirect
+	case s.IsClientError():
+		internalCode = ClientError
+	case s.IsServerError():
+		internalCode = ServerError
 	default:
-		res = Unknown
+		internalCode = Unknown
 	}
-	return res
+	sign, ok := signs[internalCode]
+	if !ok {
+		sign = signs[Unknown]
+	}
+	return sign
 }
-
-// TODO: change follow funcs as Status' methods
 
 // IsInfo if response is "Informational"
-func IsInfo(code int) bool {
-	return 100 <= code && code <= 199
+func (s *Status) IsInfo() bool {
+	return 100 <= s.Code && s.Code <= 199
 }
 
 // IsSuccess if response is "Success"
-func IsSuccess(code int) bool {
-	return 200 <= code && code <= 299
+func (s *Status) IsSuccess() bool {
+	return 200 <= s.Code && s.Code <= 299
 }
 
 // IsRedirect if response is "Redirection"
-func IsRedirect(code int) bool {
-	return 300 <= code && code <= 399
+func (s *Status) IsRedirect() bool {
+	return 300 <= s.Code && s.Code <= 399
 }
 
 // IsClientError if response is "Client errors"
-func IsClientError(code int) bool {
-	return 400 <= code && code <= 499
+func (s *Status) IsClientError() bool {
+	return 400 <= s.Code && s.Code <= 499
 }
 
 // IsServerError if response is "Server errors"
-func IsServerError(code int) bool {
-	return 500 <= code && code <= 599
+func (s *Status) IsServerError() bool {
+	return 500 <= s.Code && s.Code <= 599
 }

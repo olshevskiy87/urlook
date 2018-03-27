@@ -27,7 +27,7 @@ func (r *Result) String() string {
 	if statusText != "" {
 		outMessage = fmt.Sprintf("%s [%s]", outMessage, statusText)
 	}
-	if status.IsRedirect(r.Status.Code) && r.Message != "" {
+	if r.Status.IsRedirect() && r.Message != "" {
 		return fmt.Sprintf("%s -> %s", outMessage, r.Message)
 	}
 	if r.Message == "" {
