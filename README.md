@@ -93,6 +93,7 @@ Todo
 - [x] read more than one file
 - [ ] try HEAD http request before GET
 - [ ] add tests
+- [ ] add option to allow redirects
 
 Motivations
 -----------
