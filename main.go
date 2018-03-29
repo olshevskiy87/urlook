@@ -19,6 +19,12 @@ type argsType struct {
 	WhiteList       []string `arg:"--white,-w,separate" help:"white list url (can be specified multiple times)"`
 }
 
+var version = "0.1.0"
+
+func (argsType) Version() string {
+	return fmt.Sprintf("urlook %s", version)
+}
+
 func parseURLs(source string) ([]string, error) {
 	re, err := xurls.StrictMatchingScheme("https?://")
 	if err != nil {

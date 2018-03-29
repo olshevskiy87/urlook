@@ -16,7 +16,6 @@ Usage
 -----
 
 ```bash
-$ urlook -h
 Usage: urlook [--fail-on-duplicate] [--timeout TIMEOUT] [--white WHITE] [FILENAMES [FILENAMES ...]]
 
 Positional arguments:
@@ -29,6 +28,7 @@ Options:
   --white WHITE, -w WHITE
                          white list url (can be specified multiple times)
   --help, -h             display this help and exit
+  --version              display version and exit
 ```
 
 Examples
