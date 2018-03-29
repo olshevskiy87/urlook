@@ -97,18 +97,18 @@ func main() {
 		os.Exit(1)
 	}
 	if len(urls) == 0 {
-		fmt.Fprintln(os.Stderr, "no URLs found")
+		fmt.Println("no URLs found")
 		os.Exit(0)
 	}
 	app := urlook.New(urls)
 	app.SetIsFailOnDuplicates(args.FailOnDuplicate)
 	if err := app.SetTimeout(args.RequestTimeout); err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 	app.SetWhiteList(args.WhiteList)
 	if err := app.CheckAllURLs(); err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 	fmt.Println("no issues found")
