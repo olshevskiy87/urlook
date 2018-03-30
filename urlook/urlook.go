@@ -111,7 +111,7 @@ func (b *Bot) CheckAllURLs() error {
 		if cnt > 1 {
 			duplicateUrls[url] = cnt
 		}
-		if b.checkURLInWhiteList(url) {
+		if b.isURLInWhiteList(url) {
 			whiteListUrls = append(whiteListUrls, url)
 			continue
 		}
@@ -229,8 +229,8 @@ func (b *Bot) checkURL(url string) (*Result, error) {
 	return res, nil
 }
 
-// checkURLInWhiteList checks if the given url is in white-list
-func (b *Bot) checkURLInWhiteList(url string) bool {
+// isURLInWhiteList checks if the given url is in white-list
+func (b *Bot) isURLInWhiteList(url string) bool {
 	for _, whiteListURL := range b.whiteList {
 		if strings.Contains(url, whiteListURL) {
 			return true
