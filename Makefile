@@ -1,9 +1,7 @@
 GO=$(shell which go)
 
-.PHONY: all deps test install
+.PHONY: deps test install
 .DEFAULT_GOAL := install
-
-all: install
 
 deps:
 	@$(GO) get github.com/golang/lint/golint
