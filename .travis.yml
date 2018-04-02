@@ -10,4 +10,5 @@ before_script:
     - make deps
 
 script:
+    - make lint
     - make test
