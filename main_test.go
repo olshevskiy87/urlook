@@ -21,7 +21,7 @@ func TestParseURLs(t *testing.T) {
 	}
 	urls, err := parseURLs("test urls: https://domain1.com http://domain2.com ftp://domain3.com")
 	if err != nil {
-		t.Errorf("could not parse urls: %v", err)
+		t.Fatalf("could not parse urls: %v", err)
 	}
 	for _, test := range tests {
 		found := false
@@ -36,7 +36,7 @@ func TestParseURLs(t *testing.T) {
 			shouldBeFoundStr = "not"
 		}
 		if found != test.shouldBeFound {
-			t.Errorf("url %s should %s be found", test.url, shouldBeFoundStr)
+			t.Fatalf("url %s should %s be found", test.url, shouldBeFoundStr)
 		}
 	}
 }
@@ -50,10 +50,10 @@ func TestGetInputText(t *testing.T) {
 	}
 	inputText, err := getInputText(rr)
 	if err != nil {
-		t.Errorf("could not get input text: %v", err)
+		t.Fatalf("could not get input text: %v", err)
 	}
 	if expected != inputText {
-		t.Errorf("expected inputText \"%s\" but got \"%s\"", expected, inputText)
+		t.Fatalf("expected inputText \"%s\" but got \"%s\"", expected, inputText)
 	}
 }
 
