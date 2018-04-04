@@ -69,7 +69,7 @@ func TestGetReaders(t *testing.T) {
 	defer func(fname string) {
 		err := os.Remove(fname)
 		if err != nil {
-			t.Logf("could not close temp file %s: %v", fname, err)
+			t.Logf("could not remove temp file %s: %v", fname, err)
 		}
 	}(tmpFile.Name())
 	t.Run(
