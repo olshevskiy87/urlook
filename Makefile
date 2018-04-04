@@ -21,7 +21,7 @@ lint:
 	@test -z $(shell $(GO) install)
 
 test:
-	@$(GO) test -v
+	@$(GO) test -v ./...
 
 install:
 	@$(GO) install
