@@ -48,3 +48,23 @@ func TestSetTimeout(t *testing.T) {
 		},
 	)
 }
+
+func TestSetWorkersCount(t *testing.T) {
+	b := New([]string{})
+	tests := []struct {
+		workers int
+		ok      bool
+	}{
+		{-1, false},
+		{0, false},
+		{1, true},
+	}
+	for _, test := range tests {
+		b.SetWorkersCount(test.workers)
+		if test.ok && b.workersCount != test.workers {
+			t.Fatalf("expected workers count %v but got %v", test.workers, b.workersCount)
+		} else if !test.ok && b.workersCount == test.workers {
+			t.Fatalf("expected workers count differs but got equal values: %v", b.workersCount)
+		}
+	}
+}
