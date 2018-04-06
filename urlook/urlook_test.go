@@ -1,6 +1,9 @@
 package urlook
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func TestSetTimeout(t *testing.T) {
 	b := New([]string{})
@@ -21,6 +24,25 @@ func TestSetTimeout(t *testing.T) {
 					t.Fatalf("expected no errors but got error \"%v\"", err)
 				} else if !test.ok && err == nil {
 					t.Fatalf("expected error but got nil")
+				}
+			}
+		},
+	)
+	t.Run(
+		"check timeout duration",
+		func(t *testing.T) {
+			for _, timeout := range []int{0, 10} {
+				err := b.SetTimeout(timeout)
+				if err != nil {
+					t.Fatalf("expected no errors but got error \"%v\"", err)
+				}
+				expectedDuration := time.Duration(time.Duration(timeout) * time.Second)
+				if b.clientHTTP.Timeout != expectedDuration {
+					t.Fatalf(
+						"expected timeout duration %v but got %v",
+						expectedDuration,
+						b.clientHTTP.Timeout,
+					)
 				}
 			}
 		},
