@@ -68,3 +68,13 @@ func TestSetWorkersCount(t *testing.T) {
 		}
 	}
 }
+
+func TestSetIsFailOnDuplicates(t *testing.T) {
+	b := New([]string{})
+	for _, expected := range []bool{true, false} {
+		b.SetIsFailOnDuplicates(expected)
+		if b.isFailOnDuplicates != expected {
+			t.Fatalf("expected isFailOnDuplicates %v but got %v", b.isFailOnDuplicates, expected)
+		}
+	}
+}
