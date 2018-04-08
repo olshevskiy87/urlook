@@ -74,7 +74,7 @@ func TestSetIsFailOnDuplicates(t *testing.T) {
 	for _, expected := range []bool{true, false} {
 		b.SetIsFailOnDuplicates(expected)
 		if b.isFailOnDuplicates != expected {
-			t.Fatalf("expected isFailOnDuplicates %v but got %v", b.isFailOnDuplicates, expected)
+			t.Fatalf("expected isFailOnDuplicates %v but got %v", expected, b.isFailOnDuplicates)
 		}
 	}
 }
