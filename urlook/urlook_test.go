@@ -78,3 +78,25 @@ func TestSetIsFailOnDuplicates(t *testing.T) {
 		}
 	}
 }
+
+func TestSetWhiteList(t *testing.T) {
+	b := New([]string{})
+	tests := []struct {
+		wl       []string
+		expected []string
+	}{
+		{[]string{"w1.com", ""}, []string{"w1.com"}},
+		{[]string{"  w1.com  "}, []string{"w1.com"}},
+	}
+	for _, test := range tests {
+		b.SetWhiteList(test.wl)
+		if len(b.whiteList) != len(test.expected) {
+			t.Fatalf("expected white list length %v but got %v", len(test.expected), len(b.whiteList))
+		}
+		for i, w := range b.whiteList {
+			if w != test.expected[i] {
+				t.Fatalf("expected white list item \"%v\" but got \"%v\"", test.expected[i], w)
+			}
+		}
+	}
+}
