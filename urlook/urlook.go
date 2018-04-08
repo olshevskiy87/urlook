@@ -193,7 +193,7 @@ func (b *Bot) checkURL(url string) (*Result, error) {
 	}
 	// TODO: use Head on 405 (Method Not Allowed)
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("could not prepare new http request: %v", err)
 	}
