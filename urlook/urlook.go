@@ -205,14 +205,14 @@ func (b *Bot) checkURL(url string) (*Result, error) {
 		).
 		End()
 	if errs != nil {
-		var errs_str = make([]string, len(errs))
+		var errsStr = make([]string, len(errs))
 		for i, err := range errs {
-			errs_str[i] = fmt.Sprintf("%v", err)
+			errsStr[i] = fmt.Sprintf("%v", err)
 		}
 		return &Result{
 			URL:     url,
 			Status:  status.New(0),
-			Message: strings.Join(errs_str, ", "),
+			Message: strings.Join(errsStr, ", "),
 		}, nil
 	}
 
