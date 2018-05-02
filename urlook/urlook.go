@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/olshevskiy87/urlook/urlook/status"
+	"github.com/parnurzeal/gorequest"
 )
 
 // Bot is a main app object
@@ -191,27 +192,29 @@ func (b *Bot) checkURL(url string) (*Result, error) {
 	if b.clientHTTP == nil {
 		return nil, errors.New("http client is not defined")
 	}
-	// TODO: use Head on 405 (Method Not Allowed)
-
-	req, err := http.NewRequest(http.MethodGet, url, nil)
-	if err != nil {
-		return nil, fmt.Errorf("could not prepare new http request: %v", err)
-	}
-	req.Header.Add("User-Agent", userAgent)
-	resp, err := b.clientHTTP.Do(req)
-	if err != nil {
+	// TODO: use Head on 4xx and 5xx
+	resp, _, errs := gorequest.New().
+		Get(url).
+		Set("User-Agent", userAgent).
+		Timeout(b.clientHTTP.Timeout).
+		Retry(2, time.Second, http.StatusBadRequest, http.StatusInternalServerError).
+		RedirectPolicy(
+			func(req gorequest.Request, via []gorequest.Request) error {
+				return http.ErrUseLastResponse
+			},
+		).
+		End()
+	if errs != nil {
+		var errsStr = make([]string, len(errs))
+		for i, err := range errs {
+			errsStr[i] = fmt.Sprintf("%v", err)
+		}
 		return &Result{
 			URL:     url,
 			Status:  status.New(0),
-			Message: err.Error(),
+			Message: strings.Join(errsStr, ", "),
 		}, nil
 	}
-	defer func(resp *http.Response) {
-		err := resp.Body.Close()
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "could not close response body")
-		}
-	}(resp)
 
 	res := &Result{
 		URL:    url,
@@ -219,11 +222,14 @@ func (b *Bot) checkURL(url string) (*Result, error) {
 	}
 
 	if res.Status.IsRedirect() {
-		locationURL, err := resp.Location()
-		if err != nil {
-			res.Message = fmt.Sprintf("could not retrieve Location: %s", err.Error())
+		if locations, ok := resp.Header["Location"]; ok {
+			if len(locations) != 0 {
+				res.Message = locations[0]
+			} else {
+				res.Message = "no redirect location"
+			}
 		} else {
-			res.Message = locationURL.String()
+			res.Message = "could not retrieve redirect locations"
 		}
 	}
 	return res, nil
