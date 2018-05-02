@@ -192,7 +192,6 @@ func (b *Bot) checkURL(url string) (*Result, error) {
 	if b.clientHTTP == nil {
 		return nil, errors.New("http client is not defined")
 	}
-	// TODO: use Head on 4xx and 5xx
 	resp, _, errs := gorequest.New().
 		Get(url).
 		Set("User-Agent", userAgent).

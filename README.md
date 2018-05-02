@@ -91,7 +91,6 @@ Todo
 - [x] add cli-option timeout
 - [x] add white list option
 - [x] read more than one file
-- [ ] try HEAD http request before GET
 - [ ] add tests
 - [ ] add option to allow redirects
 
