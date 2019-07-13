@@ -67,10 +67,10 @@ func getReaders(args argsType) ([]io.ReadCloser, error) {
 	if isPipe {
 		return []io.ReadCloser{os.Stdin}, nil
 	}
-	var readers []io.ReadCloser
 	if filenamesCnt == 0 {
 		return nil, fmt.Errorf("specify at least one filename")
 	}
+	var readers []io.ReadCloser
 	for _, fname := range args.Filenames {
 		file, err := os.Open(fname)
 		if err != nil {

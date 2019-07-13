@@ -52,9 +52,7 @@ func New(urls []string) *Bot {
 	return &Bot{
 		urls: urlsMap,
 		clientHTTP: &http.Client{
-			Timeout: time.Duration(
-				time.Duration(DefaultHTTPRequestTimeout) * time.Second,
-			),
+			Timeout: time.Duration(DefaultHTTPRequestTimeout) * time.Second,
 			CheckRedirect: func(req *http.Request, via []*http.Request) error {
 				return http.ErrUseLastResponse
 			},
@@ -70,9 +68,7 @@ func (b *Bot) SetTimeout(newTimeout int) error {
 	if newTimeout < 0 {
 		return fmt.Errorf("invaild timeout value: %d", newTimeout)
 	}
-	b.clientHTTP.Timeout = time.Duration(
-		time.Duration(newTimeout) * time.Second,
-	)
+	b.clientHTTP.Timeout = time.Duration(newTimeout) * time.Second
 	return nil
 }
 
