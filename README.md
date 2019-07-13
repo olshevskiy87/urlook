@@ -52,7 +52,7 @@ issues found: 3
 ```
 
 ```
-$ grep github test\_links | urlook --white non-existent-url
+$ grep github test_links | urlook --white non-existent-url
 URLs to check: 1
   1. https://github.com
 ✓
