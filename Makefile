@@ -4,12 +4,12 @@ GO=$(shell which go)
 .DEFAULT_GOAL := install
 
 deps:
-	@$(GO) get github.com/golangci/golangci-lint/cmd/golangci-lint
+	@curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.21.0
 	@$(GO) get ./...
 
 lint:
 	@echo golangci-lint...
-	@golangci-lint run --tests=false --enable-all -D gochecknoglobals ./...
+	@golangci-lint run --tests=false --enable-all -D gochecknoglobals -D wsl -D funlen -D godox
 	@echo test go install...
 	@test -z $(shell $(GO) install)
 
