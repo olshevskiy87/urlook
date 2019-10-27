@@ -9,7 +9,7 @@ deps:
 
 lint:
 	@echo golangci-lint...
-	@golangci-lint run --tests=false --enable-all -D gochecknoglobals -D wsl -D funlen -D godox
+	@golangci-lint run
 	@echo test go install...
 	@test -z $(shell $(GO) install)
 
